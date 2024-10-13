@@ -1,6 +1,7 @@
 import os
 import time
 import shutil
+import pyperclip
 
 def move(src_path : str, dst_path : str) -> None :
     previous_files = set(os.listdir(src_path))
@@ -9,12 +10,16 @@ def move(src_path : str, dst_path : str) -> None :
         time.sleep(5)
         curent_files = set(os.listdir(src_path))
         added_files = curent_files - previous_files
+        img_str = ""
         for file in list(added_files) :
             src_file = os.path.join(src_path, file)
             dst_file = os.path.join(dst_path, file)
             print(f"Move {src_file}\nto {dst_file}")
-            shutil.copy2(src_file, dst_path)
+            img_str += "![](figure/" + file + ")\n"
+            shutil.copy(src_file, dst_path)
             os.remove(src_file)
+        if added_files :
+            pyperclip.copy(img_str)
         previous_files = set(os.listdir(src_path))
 
 if __name__ == "__main__" :
